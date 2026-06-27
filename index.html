@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EOS — English Or Spanish Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14191F;
+    --ink-2:#1C232C;
+    --parchment:#F2EDE3;
+    --parchment-dim:#C9C3B4;
+    --cobalt:#3457D5;
+    --terracotta:#C1502E;
+    --muted:#7A8088;
+    --line: rgba(242,237,227,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  a{color:inherit;}
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(20,25,31,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:18px; padding-bottom:18px;
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:1.3rem;
+    letter-spacing:0.01em;
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .logo .mark{color:var(--cobalt);}
+  .logo .mark2{color:var(--terracotta);}
+  .nav-links{display:flex; gap:28px; font-size:0.92rem; color:var(--parchment-dim);}
+  .nav-links a{text-decoration:none; transition:color .2s;}
+  .nav-links a:hover, .nav-links a:focus-visible{color:var(--parchment);}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:108px 0 96px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--cobalt); display:inline-block;}
+
+  .hero-title{
+    font-family:'Fraunces', serif;
+    font-weight:340;
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    margin:0 0 28px;
+    min-height:2.1em;
+  }
+  .hero-title .accent{
+    font-style:italic;
+    font-weight:560;
+  }
+  /* translating headline */
+  #morph{display:inline-block; position:relative;}
+  #morph .lang-en, #morph .lang-es{
+    display:block;
+    transition:opacity .5s ease, transform .5s ease, filter .5s ease;
+  }
+  #morph .lang-es{
+    position:absolute; top:0; left:0; width:100%;
+    opacity:0; transform:translateY(8px); filter:blur(2px);
+  }
+  #morph.swapped .lang-en{opacity:0; transform:translateY(-8px); filter:blur(2px);}
+  #morph.swapped .lang-es{opacity:1; transform:translateY(0); filter:blur(0);}
+
+  .hero-sub{
+    color:var(--parchment-dim);
+    font-size:1.08rem;
+    line-height:1.6;
+    max-width:480px;
+    margin-bottom:40px;
+  }
+
+  .lang-toggle{
+    display:inline-flex;
+    align-items:center;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:5px;
+    gap:4px;
+    background:var(--ink-2);
+  }
+  .lang-toggle button{
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .lang-toggle button.active{
+    background:var(--parchment);
+    color:var(--ink);
+  }
+  .lang-toggle button:focus-visible{outline:2px solid var(--cobalt); outline-offset:2px;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{padding:84px 0; border-bottom:1px solid var(--line);}
+  .section:last-of-type{border-bottom:none;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:48px; gap:24px; flex-wrap:wrap;
+  }
+  .section-title{
+    font-family:'Fraunces', serif;
+    font-weight:480;
+    font-size:1.9rem;
+    margin:0;
+  }
+  .section-title .es{
+    font-style:italic;
+    font-weight:340;
+    color:var(--parchment-dim);
+    font-size:0.95rem;
+    display:block;
+    margin-top:4px;
+  }
+  .section-note{
+    font-size:0.88rem;
+    color:var(--muted);
+    max-width:320px;
+    text-align:right;
+  }
+
+  /* ---------- PROJECT PLAQUES ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:20px;
+  }
+  .plaque{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:28px 26px;
+    position:relative;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .plaque:hover{
+    border-color:var(--parchment-dim);
+    transform:translateY(-3px);
+  }
+  .plaque-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--cobalt);
+    margin-bottom:14px;
+    display:block;
+  }
+  .plaque h3{
+    font-family:'Fraunces', serif;
+    font-weight:580;
+    font-size:1.32rem;
+    margin:0 0 2px;
+  }
+  .plaque .es-name{
+    font-style:italic;
+    color:var(--terracotta);
+    font-size:0.95rem;
+    font-weight:400;
+    margin:0 0 16px;
+    display:block;
+  }
+  .plaque p.desc{
+    color:var(--parchment-dim);
+    font-size:0.92rem;
+    line-height:1.55;
+    margin:0 0 18px;
+  }
+  .plaque-foot{
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.74rem;
+    color:var(--muted);
+  }
+  .plaque-foot a{
+    text-decoration:none;
+    color:var(--parchment);
+    border-bottom:1px solid var(--parchment-dim);
+    padding-bottom:1px;
+    transition:opacity .2s;
+  }
+  .plaque-foot a:hover{opacity:0.7;}
+
+  .empty-plaque{
+    border:1px dashed var(--line);
+    border-radius:4px;
+    padding:28px 26px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--muted);
+    font-size:0.88rem;
+    text-align:center;
+    min-height:160px;
+  }
+
+  /* ---------- ABOUT / FOOTER ---------- */
+  footer{padding:56px 0 64px;}
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:16px;
+  }
+  footer .foot-note{
+    color:var(--muted); font-size:0.82rem;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 640px){
+    .section-head{flex-direction:column; align-items:flex-start;}
+    .section-note{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="mark">E</span><span style="color:var(--parchment-dim); font-weight:400;">/</span><span class="mark2">O</span><span style="color:var(--parchment-dim); font-weight:400;">/</span>S</div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>Personal studio · Estudio personal</div>
+
+    <h1 class="hero-title">
+      <span id="morph">
+        <span class="lang-en">Things I build, <span class="accent">in two languages.</span></span>
+        <span class="lang-es">Cosas que construyo, <span class="accent">en dos idiomas.</span></span>
+      </span>
+    </h1>
+
+    <p class="hero-sub" id="heroSub">
+      EOS is where I keep the apps, tools, and experiments I make — named, described, and shipped in English or Spanish.
+    </p>
+
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button id="btnEn" class="active" onclick="setLang('en')">EN</button>
+      <button id="btnEs" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Creations<span class="es">Creaciones</span></h2>
+        <p class="section-note">Every project gets a plaque — its name, what it does, and a place to find it.</p>
+      </div>
+
+      <div class="grid" id="projectGrid">
+        <!-- PROJECT PLAQUE TEMPLATE — copy this block to add a new project -->
+        <article class="plaque">
+          <span class="plaque-tag">Coding App</span>
+          <h3>Black Mamba</h3>
+          <span class="es-name">Mamba Negra</span>
+          <p class="desc">A coding app built to move fast and strike precisely — replace this line with your real description.</p>
+          <div class="plaque-foot">
+            <span>v1.0</span>
+            <a href="#" target="_blank" rel="noopener">View project →</a>
+          </div>
+        </article>
+
+        <!-- Empty slot so you can see where the next one goes -->
+        <div class="empty-plaque">Your next creation goes here.<br>Copy the plaque block above ↑</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">About<span class="es">Acerca de</span></h2>
+      </div>
+      <p style="max-width:560px; color:var(--parchment-dim); line-height:1.7; font-size:1rem;">
+        EOS — English Or Spanish Studios — is a one-person studio. Everything here is something I designed and built myself, documented in whichever language fits the moment.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-size:1.05rem;"><span class="mark">E</span><span style="color:var(--parchment-dim); font-weight:400;">/</span><span class="mark2">O</span><span style="color:var(--parchment-dim); font-weight:400;">/</span>S</div>
+    <span class="foot-note">© <span id="year"></span> EOS Studios</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const subEn = "EOS is where I keep the apps, tools, and experiments I make — named, described, and shipped in English or Spanish.";
+  const subEs = "EOS es donde guardo las apps, herramientas y experimentos que hago — nombrados, descritos y publicados en inglés o español.";
+
+  function setLang(lang){
+    const morph = document.getElementById('morph');
+    const btnEn = document.getElementById('btnEn');
+    const btnEs = document.getElementById('btnEs');
+    const sub = document.getElementById('heroSub');
+
+    if(lang === 'es'){
+      morph.classList.add('swapped');
+      btnEs.classList.add('active');
+      btnEn.classList.remove('active');
+      sub.textContent = subEs;
+      document.documentElement.lang = 'es';
+    } else {
+      morph.classList.remove('swapped');
+      btnEn.classList.add('active');
+      btnEs.classList.remove('active');
+      sub.textContent = subEn;
+      document.documentElement.lang = 'en';
+    }
+  }
+
+  // Gentle auto-morph on load: shows EN, then eases to ES, then settles back to EN
+  window.addEventListener('load', () => {
+    setTimeout(() => setLang('es'), 1400);
+    setTimeout(() => setLang('en'), 3200);
+  });
+</script>
+
+</body>
+</html>
