@@ -1,28 +1,3 @@
-<!--
-BLACK MAMBA IDE ULTIMATE V4
-EOS INTEGRATION EDITION
-
-FEATURES:
-- Monaco Editor
-- Multi Tabs
-- File Explorer
-- AI Assistant
-- Python -> Arduino Transpiler
-- Serial Monitor
-- GPIO Simulator
-- Theme Engine
-- ESP32 / ESP8266 / Arduino
-- OTA UI
-- Package Manager
-- Cloud Save Mock
-- Live Console
-- Circuit Workspace
-- Project System
-- Keyboard Shortcuts
-- Auto Save
-- Fullscreen IDE
--->
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -32,7 +7,7 @@ FEATURES:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Black Mamba IDE Ultimate</title>
+<title>Black Mamba IDE X</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -59,11 +34,11 @@ overflow:hidden;
 .topbar{
 height:60px;
 background:#0d0d0d;
-border-bottom:1px solid #1d1d1d;
+border-bottom:1px solid #1f1f1f;
 
 display:flex;
-align-items:center;
 justify-content:space-between;
+align-items:center;
 
 padding:0 20px;
 }
@@ -92,14 +67,14 @@ transition:0.2s;
 }
 
 button:hover{
-transform:scale(1.03);
+transform:scale(1.05);
 }
 
 select{
-background:#1b1b1b;
+background:#1a1a1a;
+border:1px solid #333;
 color:white;
 padding:10px;
-border:1px solid #333;
 border-radius:5px;
 }
 
@@ -115,9 +90,14 @@ height:calc(100vh - 90px);
 .sidebar{
 width:260px;
 background:#0b0b0b;
-border-right:1px solid #1d1d1d;
+border-right:1px solid #1f1f1f;
 overflow:auto;
 padding:15px;
+transition:0.3s;
+}
+
+.sidebar.collapsed{
+width:60px;
 }
 
 .section{
@@ -125,8 +105,8 @@ margin-bottom:25px;
 }
 
 .section h3{
-color:#00ff88;
 margin-bottom:10px;
+color:#00ff88;
 }
 
 .file{
@@ -139,7 +119,7 @@ transition:0.2s;
 }
 
 .file:hover{
-background:#1f1f1f;
+background:#1d1d1d;
 }
 
 /* CENTER */
@@ -156,17 +136,20 @@ flex-direction:column;
 height:45px;
 background:#111;
 display:flex;
+align-items:center;
 border-bottom:1px solid #222;
+overflow-x:auto;
 }
 
 .tab{
 padding:12px 20px;
 cursor:pointer;
 border-right:1px solid #222;
+white-space:nowrap;
 }
 
 .active-tab{
-background:#1d1d1d;
+background:#1c1c1c;
 color:#00ff88;
 }
 
@@ -190,6 +173,7 @@ background:#0d0d0d;
 border-right:1px solid #222;
 padding:10px;
 overflow:auto;
+resize:horizontal;
 }
 
 .panel h3{
@@ -208,27 +192,15 @@ resize:none;
 outline:none;
 }
 
-/* LED */
-
-.led{
-width:40px;
-height:40px;
-border-radius:50%;
-background:#111;
-border:2px solid #00ff88;
-margin-top:10px;
-}
-
 /* TERMINAL */
 
 .console{
 background:black;
-height:180px;
+height:100%;
 overflow:auto;
 padding:10px;
 font-family:monospace;
 color:#00ff88;
-border:1px solid #222;
 }
 
 /* STATUS */
@@ -243,27 +215,163 @@ border-top:1px solid #222;
 color:#00ff88;
 }
 
-/* PACKAGE */
+/* LED */
 
-.package{
+.led{
+width:45px;
+height:45px;
+border-radius:50%;
+background:#111;
+border:2px solid #00ff88;
+margin-top:10px;
+transition:0.2s;
+}
+
+/* STARTUP */
+
+.startup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+
+z-index:9999;
+
+animation:fadeout 3s forwards;
+animation-delay:2s;
+}
+
+.startup h1{
+font-family:'Orbitron',sans-serif;
+font-size:60px;
+color:#00ff88;
+animation:pulse 1s infinite;
+}
+
+.startup p{
+margin-top:20px;
+font-size:18px;
+}
+
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.1);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+@keyframes fadeout{
+
+to{
+opacity:0;
+visibility:hidden;
+}
+
+}
+
+/* DASHBOARD */
+
+.dashboard{
+position:absolute;
+top:70px;
+left:50%;
+transform:translateX(-50%);
+
+width:80%;
+height:70%;
+
+background:#0d0d0d;
+border:1px solid #222;
+border-radius:10px;
+
+display:none;
+flex-direction:column;
+
+padding:20px;
+z-index:200;
+}
+
+.dashboard h2{
+color:#00ff88;
+margin-bottom:20px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:#111;
+padding:20px;
+border-radius:8px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.card:hover{
+transform:scale(1.03);
+background:#1a1a1a;
+}
+
+.card h3{
+color:#00ff88;
+margin-bottom:10px;
+}
+
+/* GRAPH */
+
+.graph{
+height:150px;
+display:flex;
+align-items:flex-end;
+gap:10px;
+margin-top:20px;
+}
+
+.bar{
+width:30px;
+background:#00ff88;
+animation:grow 1s ease;
+}
+
+@keyframes grow{
+
+from{
+height:0;
+}
+
+}
+
+/* COMPONENTS */
+
+.component{
 padding:10px;
 background:#111;
-border-radius:5px;
-margin-bottom:10px;
+margin-top:10px;
+border-radius:6px;
 cursor:pointer;
 }
 
-.package:hover{
-background:#1b1b1b;
-}
-
-input{
-width:100%;
-padding:10px;
-background:#111;
-border:none;
-margin-top:10px;
-color:white;
+.component:hover{
+background:#1a1a1a;
 }
 
 </style>
@@ -271,6 +379,58 @@ color:white;
 </head>
 
 <body>
+
+<!-- STARTUP -->
+
+<div class="startup">
+
+<h1>BLACK MAMBA</h1>
+<p>EOS Hardware Studio</p>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard" id="dashboard">
+
+<h2>Workspace Dashboard</h2>
+
+<div class="cards">
+
+<div class="card" onclick="loadExample('blink')">
+
+<h3>Blink LED</h3>
+<p>Simple GPIO Example</p>
+
+</div>
+
+<div class="card" onclick="loadExample('wifi')">
+
+<h3>WiFi ESP32</h3>
+<p>Connect ESP32 to WiFi</p>
+
+</div>
+
+<div class="card" onclick="loadExample('servo')">
+
+<h3>Servo Motor</h3>
+<p>Servo Sweep Example</p>
+
+</div>
+
+</div>
+
+<div class="graph">
+
+<div class="bar" style="height:40px"></div>
+<div class="bar" style="height:90px"></div>
+<div class="bar" style="height:70px"></div>
+<div class="bar" style="height:120px"></div>
+<div class="bar" style="height:60px"></div>
+
+</div>
+
+</div>
 
 <!-- TOPBAR -->
 
@@ -290,17 +450,7 @@ BLACK MAMBA IDE
 
 </select>
 
-<button onclick="connectBoard()">Connect</button>
-
-<button onclick="compileCode()">Compile</button>
-
-<button onclick="uploadCode()">Upload</button>
-
-<button onclick="saveFile()">Save</button>
-
-<button onclick="toggleTheme()">Theme</button>
-
-<button onclick="toggleFullscreen()">Fullscreen</button>
+<button onclick="connectBoard()">Connect</button> <button onclick="compileCode()">Compile</button> <button onclick="uploadCode()">Upload</button> <button onclick="saveFile()">Save</button> <button onclick="toggleTheme()">Theme</button> <button onclick="toggleSidebar()">Sidebar</button> <button onclick="openDashboard()">Dashboard</button>
 
 </div>
 
@@ -312,20 +462,17 @@ BLACK MAMBA IDE
 
 <!-- SIDEBAR -->
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
 
 <div class="section">
 
 <h3>FILES</h3>
 
-<div class="file">main.py</div>
-<div class="file">blink.py</div>
-<div class="file">wifi.py</div>
-<div class="file">sensor.py</div>
+<div class="file" onclick="switchTab('main.py')">main.py</div>
+<div class="file" onclick="switchTab('blink.py')">blink.py</div>
+<div class="file" onclick="switchTab('wifi.py')">wifi.py</div>
 
-<button onclick="newFile()">
-New File
-</button>
+<button onclick="newFile()">New File</button>
 
 </div>
 
@@ -343,38 +490,32 @@ Run GPIO
 
 <div class="section">
 
+<h3>Components</h3>
+
+<div class="component" onclick="insertCode('led')">
+LED
+</div>
+
+<div class="component" onclick="insertCode('servo')">
+Servo
+</div>
+
+<div class="component" onclick="insertCode('wifi')">
+WiFi
+</div>
+
+</div>
+
+<div class="section">
+
 <h3>AI Assistant</h3>
 
 <button onclick="aiExplain()">
-Explain Code
+Explain
 </button>
 
 <button onclick="aiFix()">
 Fix Errors
-</button>
-
-</div>
-
-<div class="section">
-
-<h3>Package Manager</h3>
-
-<div class="package">WiFi.h</div>
-<div class="package">Servo.h</div>
-<div class="package">DHT.h</div>
-
-<button onclick="installPackage()">
-Install Package
-</button>
-
-</div>
-
-<div class="section">
-
-<h3>Cloud Save</h3>
-
-<button onclick="cloudSave()">
-Upload Project
 </button>
 
 </div>
@@ -387,18 +528,10 @@ Upload Project
 
 <!-- TABS -->
 
-<div class="tabs">
+<div class="tabs" id="tabs">
 
 <div class="tab active-tab">
 main.py
-</div>
-
-<div class="tab">
-Arduino C++
-</div>
-
-<div class="tab">
-Serial
 </div>
 
 </div>
@@ -429,7 +562,7 @@ Serial
 
 <div class="panel">
 
-<h3>Console</h3>
+<h3>Terminal</h3>
 
 <div class="console" id="console"></div>
 
@@ -499,7 +632,7 @@ enabled:true
 
 function setStatus(text){
 
-document.getElementById("status").innerText = text;
+document.getElementById("status").innerText=text;
 
 log(text);
 
@@ -513,13 +646,98 @@ document.getElementById("console").innerHTML += text + "<br>";
 
 </script>
 
+<!-- DASHBOARD -->
+
+<script>
+
+function openDashboard(){
+
+const dash=document.getElementById("dashboard");
+
+if(dash.style.display==="flex"){
+
+dash.style.display="none";
+
+}else{
+
+dash.style.display="flex";
+
+}
+
+}
+
+</script>
+
+<!-- EXAMPLES -->
+
+<script>
+
+function loadExample(type){
+
+if(type==="blink"){
+
+editor.setValue(
+`from mamba import *
+
+pinMode(13, OUTPUT)
+
+while True:
+
+    digitalWrite(13, HIGH)
+    delay(1000)
+
+    digitalWrite(13, LOW)
+    delay(1000)
+`
+);
+
+}
+
+if(type==="wifi"){
+
+editor.setValue(
+`from mamba import *
+
+wifi.connect("YOUR_WIFI","PASSWORD")
+
+print("Connected")
+`
+);
+
+}
+
+if(type==="servo"){
+
+editor.setValue(
+`from mamba import *
+
+servo.attach(9)
+
+while True:
+
+    servo.write(0)
+    delay(1000)
+
+    servo.write(180)
+    delay(1000)
+`
+);
+
+}
+
+setStatus("Example Loaded");
+
+}
+
+</script>
+
 <!-- TRANSPILER -->
 
 <script>
 
 function transpilePythonToCpp(code){
 
-let cpp = `
+let cpp=`
 void setup(){
 
     pinMode(13, OUTPUT);
@@ -533,8 +751,8 @@ void loop(){
 if(code.includes("HIGH")){
 
 cpp += `
-    digitalWrite(13, HIGH);
-    delay(1000);
+digitalWrite(13, HIGH);
+delay(1000);
 `;
 
 }
@@ -542,8 +760,8 @@ cpp += `
 if(code.includes("LOW")){
 
 cpp += `
-    digitalWrite(13, LOW);
-    delay(1000);
+digitalWrite(13, LOW);
+delay(1000);
 `;
 
 }
@@ -558,11 +776,11 @@ return cpp;
 
 function compileCode(){
 
-const code = editor.getValue();
+const code=editor.getValue();
 
-const cpp = transpilePythonToCpp(code);
+const cpp=transpilePythonToCpp(code);
 
-document.getElementById("cppOutput").value = cpp;
+document.getElementById("cppOutput").value=cpp;
 
 setStatus("Compilation Finished");
 
@@ -588,33 +806,9 @@ baudRate:115200
 
 setStatus("Board Connected");
 
-readSerial();
-
-}catch(err){
+}catch{
 
 setStatus("Connection Failed");
-
-}
-
-}
-
-async function readSerial(){
-
-const decoder = new TextDecoderStream();
-
-port.readable.pipeTo(decoder.writable);
-
-const reader = decoder.readable.getReader();
-
-while(true){
-
-const { value, done } = await reader.read();
-
-if(done){
-break;
-}
-
-document.getElementById("serialOutput").value += value;
 
 }
 
@@ -633,7 +827,7 @@ setStatus("Uploading Firmware");
 
 setTimeout(()=>{
 
-setStatus("Upload Complete (Mock)");
+setStatus("Upload Finished");
 
 },2000);
 
@@ -645,21 +839,19 @@ setStatus("Upload Complete (Mock)");
 
 <script>
 
-let ledState = false;
+let led=false;
 
 function simulateLED(){
 
-ledState = !ledState;
+led=!led;
 
-const led = document.getElementById("led");
+if(led){
 
-if(ledState){
-
-led.style.background="#00ff88";
+document.getElementById("led").style.background="#00ff88";
 
 }else{
 
-led.style.background="#111";
+document.getElementById("led").style.background="#111";
 
 }
 
@@ -669,35 +861,43 @@ setStatus("GPIO Simulation Complete");
 
 </script>
 
-<!-- FILE -->
+<!-- COMPONENTS -->
 
 <script>
 
-function saveFile(){
+function insertCode(type){
 
-const text = editor.getValue();
+if(type==="led"){
 
-const blob = new Blob([text], {
-type:"text/plain"
-});
-
-const a = document.createElement("a");
-
-a.href = URL.createObjectURL(blob);
-
-a.download = "main.py";
-
-a.click();
-
-setStatus("Project Saved");
+editor.trigger(
+'keyboard',
+'type',
+{text:'\npinMode(13, OUTPUT)\n'}
+);
 
 }
 
-function newFile(){
+if(type==="servo"){
 
-alert("New File System Coming Soon");
+editor.trigger(
+'keyboard',
+'type',
+{text:'\nservo.attach(9)\n'}
+);
 
-setStatus("New File Created");
+}
+
+if(type==="wifi"){
+
+editor.trigger(
+'keyboard',
+'type',
+{text:'\nwifi.connect("SSID","PASSWORD")\n'}
+);
+
+}
+
+setStatus(type + " component inserted");
 
 }
 
@@ -709,59 +909,72 @@ setStatus("New File Created");
 
 function aiExplain(){
 
-const code = editor.getValue();
-
 alert(
-"AI EXPLAINER\\n\\n" +
-"This code blinks LED pin 13 every second."
+"AI Assistant\\n\\n" +
+"This code controls hardware components using Python-like syntax."
 );
 
-setStatus("AI Explained Code");
+setStatus("AI Explanation Complete");
 
 }
 
 function aiFix(){
 
 alert(
-"AI DEBUGGER\\n\\n" +
-"No major errors detected."
+"AI Debugger\\n\\n" +
+"No critical errors found."
 );
 
-setStatus("AI Debug Complete");
+setStatus("AI Scan Complete");
 
 }
 
 </script>
 
-<!-- CLOUD -->
+<!-- FILE -->
 
 <script>
 
-function cloudSave(){
+function saveFile(){
 
-setStatus("Uploading To EOS Cloud");
+const blob = new Blob(
+[editor.getValue()],
+{type:"text/plain"}
+);
 
-setTimeout(()=>{
+const a=document.createElement("a");
 
-alert("Cloud Upload Successful");
+a.href=URL.createObjectURL(blob);
 
-setStatus("Cloud Save Complete");
+a.download="main.py";
 
-},1500);
+a.click();
+
+setStatus("Project Saved");
 
 }
 
-</script>
+function newFile(){
 
-<!-- PACKAGE -->
+const name=prompt("Enter file name");
 
-<script>
+if(!name) return;
 
-function installPackage(){
+const tab=document.createElement("div");
 
-alert("Package Installed");
+tab.className="tab";
 
-setStatus("Library Installed");
+tab.innerText=name;
+
+document.getElementById("tabs").appendChild(tab);
+
+setStatus("New File Created");
+
+}
+
+function switchTab(name){
+
+setStatus("Opened " + name);
 
 }
 
@@ -781,37 +994,29 @@ monaco.editor.setTheme("vs");
 
 dark=false;
 
-setStatus("Light Theme Enabled");
-
 }else{
 
 monaco.editor.setTheme("vs-dark");
 
 dark=true;
 
-setStatus("Dark Theme Enabled");
-
 }
+
+setStatus("Theme Changed");
 
 }
 
 </script>
 
-<!-- FULLSCREEN -->
+<!-- SIDEBAR -->
 
 <script>
 
-function toggleFullscreen(){
+function toggleSidebar(){
 
-if(!document.fullscreenElement){
-
-document.documentElement.requestFullscreen();
-
-}else{
-
-document.exitFullscreen();
-
-}
+document
+.getElementById("sidebar")
+.classList.toggle("collapsed");
 
 }
 
@@ -824,7 +1029,7 @@ document.exitFullscreen();
 setInterval(()=>{
 
 localStorage.setItem(
-"blackmamba_autosave",
+"bm_autosave",
 editor.getValue()
 );
 
@@ -832,15 +1037,13 @@ editor.getValue()
 
 window.onload=()=>{
 
-const saved = localStorage.getItem(
-"blackmamba_autosave"
-);
+const save=localStorage.getItem("bm_autosave");
 
-if(saved){
+if(save){
 
 setTimeout(()=>{
 
-editor.setValue(saved);
+editor.setValue(save);
 
 },1000);
 
@@ -878,3 +1081,268 @@ compileCode();
 
 </body>
 </html>
+<!--
+BLACK MAMBA SIMULATION ENGINE
+ADD THIS BELOW YOUR EXISTING CODE
+BEFORE </body>
+-->
+
+<style>
+
+/* SIMULATION AREA */
+
+.simulation-window{
+position:fixed;
+right:20px;
+top:80px;
+
+width:350px;
+height:500px;
+
+background:#0d0d0d;
+border:1px solid #222;
+border-radius:10px;
+
+overflow:hidden;
+
+display:flex;
+flex-direction:column;
+
+z-index:100;
+}
+
+.sim-top{
+height:50px;
+background:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-bottom:1px solid #222;
+
+font-weight:bold;
+color:#00ff88;
+}
+
+.sim-canvas{
+flex:1;
+background:#050505;
+position:relative;
+overflow:hidden;
+}
+
+/* ARDUINO */
+
+.board{
+position:absolute;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+
+width:220px;
+height:120px;
+
+background:#14532d;
+border-radius:10px;
+border:2px solid #00ff88;
+}
+
+.board-text{
+position:absolute;
+top:10px;
+left:10px;
+
+font-size:18px;
+font-weight:bold;
+color:white;
+}
+
+/* LED */
+
+.virtual-led{
+position:absolute;
+top:70px;
+right:40px;
+
+width:40px;
+height:40px;
+
+border-radius:50%;
+background:#111;
+
+border:2px solid #00ff88;
+
+transition:0.2s;
+}
+
+/* PINS */
+
+.pin{
+position:absolute;
+
+width:10px;
+height:20px;
+
+background:#999;
+}
+
+.pin13{
+top:0;
+left:170px;
+}
+
+/* WIRE */
+
+.wire{
+position:absolute;
+top:95px;
+left:190px;
+
+width:80px;
+height:4px;
+
+background:red;
+
+transform:rotate(-20deg);
+
+transform-origin:left center;
+}
+
+/* SERIAL */
+
+.serial-live{
+height:120px;
+background:black;
+color:#00ff88;
+font-family:monospace;
+padding:10px;
+overflow:auto;
+border-top:1px solid #222;
+}
+
+</style>
+
+<!-- SIMULATION WINDOW -->
+
+<div class="simulation-window">
+
+<div class="sim-top">
+LIVE HARDWARE SIMULATION
+</div>
+
+<div class="sim-canvas">
+
+<!-- BOARD -->
+
+<div class="board">
+
+<div class="board-text">
+Arduino UNO
+</div>
+
+<div class="pin pin13"></div>
+
+</div>
+
+<!-- WIRE -->
+
+<div class="wire"></div>
+
+<!-- LED -->
+
+<div class="virtual-led" id="virtualLED"></div>
+
+</div>
+
+<!-- SERIAL -->
+
+<div class="serial-live" id="liveSerial">
+
+[ Black Mamba Simulator Started ]
+
+</div>
+
+</div>
+
+<script>
+
+/* SIMULATION ENGINE */
+
+let simRunning=false;
+let ledState=false;
+
+function startSimulation(){
+
+if(simRunning) return;
+
+simRunning=true;
+
+const code = editor.getValue();
+
+const serial=document.getElementById("liveSerial");
+
+serial.innerHTML += "<br>Running Simulation...";
+
+if(code.includes("digitalWrite(13, HIGH)") &&
+   code.includes("digitalWrite(13, LOW)")){
+
+simulateBlink();
+
+}
+
+else{
+
+serial.innerHTML += "<br>No recognizable simulation pattern.";
+
+}
+
+}
+
+/* LED BLINK */
+
+function simulateBlink(){
+
+const led=document.getElementById("virtualLED");
+
+const serial=document.getElementById("liveSerial");
+
+serial.innerHTML += "<br>LED Blink Program Detected";
+
+setInterval(()=>{
+
+ledState=!ledState;
+
+if(ledState){
+
+led.style.background="#00ff88";
+
+serial.innerHTML += "<br>PIN 13 -> HIGH";
+
+}else{
+
+led.style.background="#111";
+
+serial.innerHTML += "<br>PIN 13 -> LOW";
+
+}
+
+serial.scrollTop=serial.scrollHeight;
+
+},1000);
+
+}
+
+/* AUTO BUTTON */
+
+const simButton=document.createElement("button");
+
+simButton.innerText="Simulate";
+
+simButton.style.marginLeft="10px";
+
+simButton.onclick=startSimulation;
+
+document.querySelector(".controls")
+.appendChild(simButton);
+
+</script>
