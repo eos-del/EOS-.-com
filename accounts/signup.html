@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EOS Sign Up</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="firebase.js"></script>
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="login-box">
+
+<h1>Create EOS Account</h1>
+
+<input
+id="email"
+type="email"
+placeholder="Email">
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+<button id="signupButton">
+Create Account
+</button>
+
+<br><br>
+
+<a href="index.html">
+Already have an account? Login
+</a>
+
+<p id="message"></p>
+
+</div>
+
+<script type="module">
+
+const wait = setInterval(() => {
+
+if (!window.auth) return;
+
+clearInterval(wait);
+
+const signupButton = document.getElementById("signupButton");
+
+signupButton.addEventListener("click", async () => {
+
+const email = document.getElementById("email").value;
+
+const password = document.getElementById("password").value;
+
+const message = document.getElementById("message");
+
+try {
+
+await window.createUserWithEmailAndPassword(
+window.auth,
+email,
+password
+);
+
+message.style.color = "lime";
+message.textContent = "Account created successfully!";
+
+setTimeout(() => {
+
+window.location.href = "index.html";
+
+},1500);
+
+}
+
+catch(error){
+
+message.style.color = "red";
+message.textContent = error.message;
+
+}
+
+});
+
+},100);
+
+</script>
+
+</body>
+
+</html>
