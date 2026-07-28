@@ -29,3 +29,5 @@ window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
 window.signInWithEmailAndPassword = signInWithEmailAndPassword;
 window.signOut = signOut;
 window.onAuthStateChanged = onAuthStateChanged;
+window.sendEmailVerification = sendEmailVerification;
+
