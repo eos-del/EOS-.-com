@@ -105,7 +105,57 @@ message.textContent=error.message;
 });
 
 },100);
+const forgotPassword =
+document.getElementById("forgotPassword");
 
+
+forgotPassword.onclick = async function(e){
+
+e.preventDefault();
+
+
+const email =
+document.getElementById("email").value;
+
+
+const message =
+document.getElementById("message");
+
+
+if(email === ""){
+
+message.innerHTML =
+"Enter your email first";
+
+return;
+
+}
+
+
+try{
+
+await window.sendPasswordResetEmail(
+window.auth,
+email
+);
+
+
+message.innerHTML =
+"Password reset email sent!";
+
+
+}
+
+catch(error){
+
+message.innerHTML =
+error.message;
+
+}
+
+
+}
+  
 </script>
 
 </body>
