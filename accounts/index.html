@@ -62,8 +62,18 @@ if(!window.auth) return;
 
 clearInterval(wait);
 
-const loginButton = document.getElementById("loginButton");
+window.onAuthStateChanged(window.auth, (user) => {
 
+if(user){
+
+window.location.href="dashboard.html";
+
+}
+
+});
+
+const loginButton = document.getElementById("loginButton");
+  
 loginButton.addEventListener("click", async () => {
 
 const email = document.getElementById("email").value;
