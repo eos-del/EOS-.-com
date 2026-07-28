@@ -5,7 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 // YOUR FIREBASE CONFIG
