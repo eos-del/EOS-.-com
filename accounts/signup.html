@@ -66,12 +66,17 @@ const message = document.getElementById("message");
 
 try {
 
+const userCredential =
 await window.createUserWithEmailAndPassword(
 window.auth,
 email,
 password
 );
 
+await window.sendEmailVerification(
+userCredential.user
+);
+  
 message.style.color = "lime";
 message.textContent = "Account created successfully!";
 
