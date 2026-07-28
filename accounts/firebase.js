@@ -31,4 +31,5 @@ window.signInWithEmailAndPassword = signInWithEmailAndPassword;
 window.signOut = signOut;
 window.onAuthStateChanged = onAuthStateChanged;
 window.sendEmailVerification = sendEmailVerification;
+window.sendPasswordResetEmail = sendPasswordResetEmail;
 
