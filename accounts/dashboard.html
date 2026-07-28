@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EOS Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="firebase.js"></script>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+<h1>Welcome to EOS</h1>
+
+<p id="userEmail"></p>
+
+<button id="logoutButton">
+Logout
+</button>
+
+</div>
+
+<script type="module">
+
+const wait = setInterval(() => {
+
+if(!window.auth) return;
+
+clearInterval(wait);
+
+window.onAuthStateChanged(window.auth,(user)=>{
+
+if(user){
+
+document.getElementById("userEmail").textContent =
+"Logged in as: " + user.email;
+
+}else{
+
+window.location.href="index.html";
+
+}
+
+});
+
+document.getElementById("logoutButton")
+.addEventListener("click",async()=>{
+
+await window.signOut(window.auth);
+
+window.location.href="index.html";
+
+});
+
+},100);
+
+</script>
+
+</body>
+
+</html>
