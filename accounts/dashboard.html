@@ -3,66 +3,674 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>EOS Dashboard</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="style.css">
+    <title>EOS Dashboard</title>
 
-<script type="module" src="firebase.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .dashboard {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+            padding: 50px 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-header h1 {
+            margin: 0;
+        }
+
+        .user-card,
+        .owner-card,
+        .apps-card {
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .user-card p,
+        .owner-card p {
+            margin: 10px 0;
+        }
+
+        .logout-button,
+        .owner-button,
+        .app-button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .owner-input {
+            width: min(100%, 400px);
+            box-sizing: border-box;
+            padding: 13px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.25);
+            color: white;
+            outline: none;
+        }
+
+        .owner-input:focus {
+            border-color: #00e5ff;
+        }
+
+        #ownerMessage {
+            min-height: 24px;
+            margin-top: 12px;
+        }
+
+        #ownerPanel {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 14px;
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .app-card {
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .app-card h3 {
+            margin-top: 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 20px;
+        }
+
+        .verified {
+            color: lime;
+        }
+
+        .not-verified {
+            color: #ffcc00;
+        }
+
+        .owner-success {
+            color: #00ff88;
+        }
+
+        .owner-error {
+            color: #ff4d4d;
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<div class="login-box">
 
-<h1>Welcome to EOS</h1>
+<div id="loadingScreen" class="loading">
 
-<p id="userEmail"></p>
-
-<button id="logoutButton">
-Logout
-</button>
+    Loading EOS...
 
 </div>
 
+
+<div id="dashboard" class="dashboard hidden">
+
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h1>EOS</h1>
+
+            <p>Welcome to your EOS account.</p>
+
+        </div>
+
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- ACCOUNT INFORMATION -->
+
+    <div class="user-card">
+
+        <h2>Your Account</h2>
+
+        <p>
+            <strong>Email:</strong>
+            <span id="userEmail"></span>
+        </p>
+
+        <p>
+            <strong>Verification:</strong>
+            <span id="verificationStatus"></span>
+        </p>
+
+    </div>
+
+
+    <!-- NORMAL EOS STUDIO -->
+
+    <div class="apps-card">
+
+        <h2>EOS Studio</h2>
+
+        <p>
+            Your normal EOS applications.
+        </p>
+
+
+        <div class="app-grid">
+
+            <div class="app-card">
+
+                <h3>Black Mamba</h3>
+
+                <p>
+                    EOS coding and hardware application.
+                </p>
+
+                <button
+                    class="app-button"
+                    onclick="openBlackMamba()"
+                >
+                    Open
+                </button>
+
+            </div>
+
+
+            <div class="app-card">
+
+                <h3>EOS Chess</h3>
+
+                <p>
+                    Coming soon.
+                </p>
+
+                <button
+                    class="app-button"
+                    disabled
+                >
+                    Coming Soon
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- OWNER AUTHENTICATION -->
+
+    <div
+        id="ownerSection"
+        class="owner-card"
+    >
+
+        <h2>👑 EOS Owner</h2>
+
+        <p>
+            Owner access requires additional verification.
+        </p>
+
+
+        <input
+            id="ownerPassword"
+            class="owner-input"
+            type="password"
+            placeholder="EOS Owner Password"
+            autocomplete="current-password"
+        >
+
+
+        <br>
+
+
+        <button
+            id="ownerVerifyButton"
+            class="owner-button"
+        >
+            Verify Owner
+        </button>
+
+
+        <p id="ownerMessage"></p>
+
+
+        <!-- PREMIUM AREA -->
+
+        <div id="ownerPanel">
+
+            <h2>👑 Owner Access Granted</h2>
+
+            <p>
+                You are verified as the EOS Owner.
+            </p>
+
+            <button
+                class="app-button"
+                onclick="openPremiumStudio()"
+            >
+                Open Premium EOS Studio
+            </button>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- FIREBASE -->
+
+<script
+    type="module"
+    src="firebase.js"
+></script>
+
+
 <script type="module">
 
-const wait = setInterval(() => {
 
-if(!window.auth) return;
+/* ---------------------------------------
+   WAIT FOR FIREBASE
+--------------------------------------- */
 
-clearInterval(wait);
+const waitForFirebase = setInterval(() => {
 
-window.onAuthStateChanged(window.auth,(user)=>{
+    if (
+        !window.auth ||
+        !window.onAuthStateChanged ||
+        !window.signOut
+    ) {
+        return;
+    }
 
-if(user){
+    clearInterval(waitForFirebase);
 
-document.getElementById("userEmail").textContent =
-"Logged in as: " + user.email;
 
-}else{
+    /* ---------------------------------------
+       CHECK LOGIN
+    --------------------------------------- */
 
-window.location.href="index.html";
+    window.onAuthStateChanged(
+        window.auth,
+        async (user) => {
 
-}
 
-});
+            const loadingScreen =
+                document.getElementById("loadingScreen");
 
-document.getElementById("logoutButton")
-.addEventListener("click",async()=>{
 
-await window.signOut(window.auth);
+            const dashboard =
+                document.getElementById("dashboard");
 
-window.location.href="index.html";
 
-});
+            const userEmail =
+                document.getElementById("userEmail");
 
-},100);
+
+            const verificationStatus =
+                document.getElementById("verificationStatus");
+
+
+            if (!user) {
+
+                window.location.href = "index.html";
+
+                return;
+
+            }
+
+
+            /* ---------------------------------------
+               USER INFORMATION
+            --------------------------------------- */
+
+            userEmail.textContent =
+                user.email || "Unknown";
+
+
+            if (user.emailVerified) {
+
+                verificationStatus.textContent =
+                    "Verified ✓";
+
+                verificationStatus.className =
+                    "verified";
+
+            } else {
+
+                verificationStatus.textContent =
+                    "Not verified";
+
+                verificationStatus.className =
+                    "not-verified";
+
+            }
+
+
+            loadingScreen.classList.add("hidden");
+
+            dashboard.classList.remove("hidden");
+
+
+            /* ---------------------------------------
+               LOGOUT
+            --------------------------------------- */
+
+            document
+                .getElementById("logoutButton")
+                .addEventListener(
+                    "click",
+                    async () => {
+
+                        try {
+
+                            await window.signOut(
+                                window.auth
+                            );
+
+                            window.location.href =
+                                "index.html";
+
+                        }
+
+                        catch (error) {
+
+                            console.error(error);
+
+                            alert(
+                                "Logout failed."
+                            );
+
+                        }
+
+                    }
+                );
+
+
+            /* ---------------------------------------
+               OWNER VERIFICATION
+            --------------------------------------- */
+
+            const ownerVerifyButton =
+                document.getElementById(
+                    "ownerVerifyButton"
+                );
+
+
+            ownerVerifyButton.addEventListener(
+                "click",
+                async () => {
+
+
+                    const password =
+                        document
+                            .getElementById(
+                                "ownerPassword"
+                            )
+                            .value;
+
+
+                    const message =
+                        document.getElementById(
+                            "ownerMessage"
+                        );
+
+
+                    const ownerPanel =
+                        document.getElementById(
+                            "ownerPanel"
+                        );
+
+
+                    message.className =
+                        "";
+
+
+                    ownerPanel.style.display =
+                        "none";
+
+
+                    if (!password) {
+
+                        message.textContent =
+                            "Enter your EOS Owner Password.";
+
+                        message.className =
+                            "owner-error";
+
+                        return;
+
+                    }
+
+
+                    /* ---------------------------------------
+                       EMAIL VERIFICATION CHECK
+                    --------------------------------------- */
+
+                    if (!user.emailVerified) {
+
+                        message.textContent =
+                            "Verify your EOS account email before Owner access.";
+
+                        message.className =
+                            "owner-error";
+
+                        return;
+
+                    }
+
+
+                    try {
+
+
+                        /* ---------------------------------------
+                           GET FIREBASE ID TOKEN
+                        --------------------------------------- */
+
+                        const idToken =
+                            await user.getIdToken(true);
+
+
+                        /* ---------------------------------------
+                           SEND TOKEN + OWNER PASSWORD
+                           TO CLOUDFLARE WORKER
+                        --------------------------------------- */
+
+                        const response =
+                            await fetch(
+                                "https://eos-owner-auth.swathiturl.workers.dev/",
+                                {
+
+                                    method: "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+                                            "application/json",
+
+                                        "Authorization":
+                                            `Bearer ${idToken}`
+
+                                    },
+
+                                    body: JSON.stringify({
+
+                                        password:
+                                            password
+
+                                    })
+
+                                }
+                            );
+
+
+                        const result =
+                            await response.json();
+
+
+                        /* ---------------------------------------
+                           SUCCESS
+                        --------------------------------------- */
+
+                        if (
+                            result.success === true &&
+                            result.owner === true
+                        ) {
+
+                            message.textContent =
+                                "👑 EOS Owner verified successfully!";
+
+                            message.className =
+                                "owner-success";
+
+
+                            ownerPanel.style.display =
+                                "block";
+
+
+                            document
+                                .getElementById(
+                                    "ownerPassword"
+                                )
+                                .value = "";
+
+
+                        }
+
+                        /* ---------------------------------------
+                           FAILURE
+                        --------------------------------------- */
+
+                        else {
+
+                            message.textContent =
+                                result.message ||
+                                "Owner verification failed.";
+
+                            message.className =
+                                "owner-error";
+
+                        }
+
+
+                    }
+
+                    catch (error) {
+
+                        console.error(error);
+
+                        message.textContent =
+                            "Unable to contact EOS Owner security.";
+
+                        message.className =
+                            "owner-error";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+}, 100);
+
+
+
+/* ---------------------------------------
+   BLACK MAMBA
+--------------------------------------- */
+
+window.openBlackMamba = function() {
+
+    window.location.href =
+        "../bm/index.html";
+
+};
+
+
+
+/* ---------------------------------------
+   PREMIUM EOS STUDIO
+--------------------------------------- */
+
+window.openPremiumStudio = function() {
+
+    /*
+       We haven't connected the real Premium
+       EOS Studio page yet.
+
+       For now this prevents the button from
+       pretending the Premium Studio already exists.
+    */
+
+    alert(
+        "Premium EOS Studio is being connected."
+    );
+
+};
+
 
 </script>
+
 
 </body>
 
