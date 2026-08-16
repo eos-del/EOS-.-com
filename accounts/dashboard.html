@@ -53,9 +53,7 @@
         }
 
         .account-card,
-        .studio-card,
-        .owner-card,
-        .premium-card {
+        .studio-card {
             padding: 28px;
             margin-bottom: 25px;
             border-radius: 20px;
@@ -65,9 +63,7 @@
         }
 
         .account-card h2,
-        .studio-card h2,
-        .owner-card h2,
-        .premium-card h2 {
+        .studio-card h2 {
             margin-top: 0;
         }
 
@@ -90,10 +86,15 @@
             font-size: 15px;
             cursor: pointer;
             transition: 0.2s ease;
+            user-select: none;
         }
 
         button:hover {
             transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         button:disabled {
@@ -111,67 +112,6 @@
             background: rgba(255, 255, 255, 0.09);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.14);
-        }
-
-        .owner-card {
-            display: none;
-            border-color: rgba(255, 215, 0, 0.3);
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255, 215, 0, 0.08),
-                    rgba(139, 92, 246, 0.08)
-                );
-        }
-
-        .premium-card {
-            display: none;
-            border-color: rgba(0, 229, 255, 0.3);
-        }
-
-        .owner-badge,
-        .premium-badge {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-weight: bold;
-        }
-
-        .owner-badge {
-            color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .premium-badge {
-            color: #00e5ff;
-            background: rgba(0, 229, 255, 0.08);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-        }
-
-        .owner-input {
-            width: min(100%, 450px);
-            padding: 14px;
-            margin-top: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(0, 0, 0, 0.25);
-            color: white;
-            outline: none;
-            font-size: 15px;
-        }
-
-        .message {
-            min-height: 24px;
-            margin-top: 16px;
-        }
-
-        .success {
-            color: #00ff88;
-        }
-
-        .error {
-            color: #ff5555;
         }
 
         .loading {
@@ -208,8 +148,6 @@
 >
 
 
-    <!-- HEADER -->
-
     <div class="dashboard-header">
 
         <div>
@@ -221,18 +159,19 @@
         </div>
 
 
+        <!-- REAL LOGOUT BUTTON -->
+
         <button
             id="logoutButton"
             class="secondary-button"
             type="button"
+            onclick="logoutEOS()"
         >
             Logout
         </button>
 
     </div>
 
-
-    <!-- ACCOUNT -->
 
     <div class="account-card">
 
@@ -252,8 +191,6 @@
     </div>
 
 
-    <!-- EOS STUDIO -->
-
     <div class="studio-card">
 
         <h2>EOS Studio</h2>
@@ -261,6 +198,7 @@
         <p>
             Enter the main EOS platform.
         </p>
+
 
         <div class="button-row">
 
@@ -282,83 +220,6 @@
             </button>
 
         </div>
-
-    </div>
-
-
-    <!-- OWNER -->
-
-    <div
-        id="ownerCard"
-        class="owner-card"
-    >
-
-        <h2>👑 EOS Owner</h2>
-
-        <span class="owner-badge">
-            OWNER ACCOUNT RECOGNIZED
-        </span>
-
-        <p>
-            Enter your separate EOS Owner Password.
-        </p>
-
-
-        <input
-            id="ownerPassword"
-            class="owner-input"
-            type="password"
-            placeholder="EOS Owner Password"
-            autocomplete="off"
-        >
-
-
-        <div class="button-row">
-
-            <button
-                id="verifyOwnerButton"
-                class="primary-button"
-                type="button"
-            >
-                Verify Owner
-            </button>
-
-        </div>
-
-
-        <p
-            id="ownerMessage"
-            class="message"
-        ></p>
-
-    </div>
-
-
-    <!-- PREMIUM -->
-
-    <div
-        id="premiumCard"
-        class="premium-card"
-    >
-
-        <h2>👑 Premium EOS Studio</h2>
-
-        <span class="premium-badge">
-            OWNER ACCESS VERIFIED
-        </span>
-
-        <p>
-            Premium EOS features are unlocked.
-        </p>
-
-
-        <button
-            id="openPremiumStudio"
-            class="primary-button"
-            type="button"
-        >
-            Open Premium EOS Studio
-        </button>
 
     </div>
 
@@ -410,6 +271,10 @@
         getAuth(app);
 
 
+    window.eosAuth =
+        auth;
+
+
     const loading =
         document.getElementById("loading");
 
@@ -419,35 +284,14 @@
     const userEmail =
         document.getElementById("userEmail");
 
-    const logoutButton =
-        document.getElementById("logoutButton");
 
-    const ownerCard =
-        document.getElementById("ownerCard");
-
-    const ownerPassword =
-        document.getElementById("ownerPassword");
-
-    const verifyOwnerButton =
-        document.getElementById("verifyOwnerButton");
-
-    const ownerMessage =
-        document.getElementById("ownerMessage");
-
-    const premiumCard =
-        document.getElementById("premiumCard");
-
-
-    let currentUser = null;
-
-
-    /* -----------------------------------------
-       AUTH STATE
-    ----------------------------------------- */
+    /*
+       LOGIN CHECK
+    */
 
     onAuthStateChanged(
         auth,
-        async (user) => {
+        (user) => {
 
             if (!user) {
 
@@ -458,9 +302,6 @@
                 return;
 
             }
-
-
-            currentUser = user;
 
 
             userEmail.textContent =
@@ -475,81 +316,30 @@
                 "hidden"
             );
 
-
-            /* -----------------------------------------
-               OWNER RECOGNITION
-            ----------------------------------------- */
-
-            try {
-
-                const idToken =
-                    await user.getIdToken(true);
-
-
-                const response =
-                    await fetch(
-                        "https://eos-owner-auth.swathiturl.workers.dev/",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-
-                                "Authorization":
-                                    `Bearer ${idToken}`,
-
-                                "X-EOS-Action":
-                                    "check-owner"
-                            },
-
-                            body:
-                                JSON.stringify({})
-                        }
-                    );
-
-
-                const result =
-                    await response.json();
-
-
-                if (
-                    result.success === true &&
-                    result.owner === true &&
-                    result.verified === true
-                ) {
-
-                    ownerCard.style.display =
-                        "block";
-
-                }
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Owner recognition failed:",
-                    error
-                );
-
-            }
-
         }
     );
 
 
-    /* -----------------------------------------
-       LOGOUT
-    ----------------------------------------- */
+    /*
+       LOGOUT FUNCTION
 
-    logoutButton.addEventListener(
-        "click",
-        async () => {
+       This is attached directly to
+       the button's onclick.
+    */
 
-            logoutButton.disabled = true;
+    window.logoutEOS =
+        async function () {
 
-            logoutButton.textContent =
+            const button =
+                document.getElementById(
+                    "logoutButton"
+                );
+
+
+            button.disabled =
+                true;
+
+            button.textContent =
                 "Logging out...";
 
 
@@ -557,11 +347,11 @@
 
                 await signOut(auth);
 
+
                 /*
-                   replace() prevents the browser
-                   from simply returning to the
-                   authenticated dashboard with
-                   the Back button.
+                   Replace the current page
+                   instead of keeping it
+                   in browser history.
                 */
 
                 window.location.replace(
@@ -573,15 +363,17 @@
             catch (error) {
 
                 console.error(
-                    "Logout error:",
+                    "EOS Logout Error:",
                     error
                 );
 
-                logoutButton.disabled =
+
+                button.disabled =
                     false;
 
-                logoutButton.textContent =
+                button.textContent =
                     "Logout";
+
 
                 alert(
                     "Logout failed. Please try again."
@@ -589,13 +381,12 @@
 
             }
 
-        }
-    );
+        };
 
 
-    /* -----------------------------------------
-       NORMAL EOS STUDIO
-    ----------------------------------------- */
+    /*
+       EOS STUDIO
+    */
 
     document
         .getElementById("openStudio")
@@ -610,9 +401,9 @@
         );
 
 
-    /* -----------------------------------------
+    /*
        BLACK MAMBA
-    ----------------------------------------- */
+    */
 
     document
         .getElementById("openBlackMamba")
@@ -622,163 +413,6 @@
 
                 window.location.href =
                     "../bm/";
-
-            }
-        );
-
-
-    /* -----------------------------------------
-       OWNER PASSWORD
-    ----------------------------------------- */
-
-    verifyOwnerButton.addEventListener(
-        "click",
-        async () => {
-
-            const password =
-                ownerPassword.value;
-
-
-            if (!password) {
-
-                ownerMessage.textContent =
-                    "Enter your EOS Owner Password.";
-
-                ownerMessage.className =
-                    "message error";
-
-                return;
-
-            }
-
-
-            if (!currentUser) {
-
-                ownerMessage.textContent =
-                    "You are not logged in.";
-
-                ownerMessage.className =
-                    "message error";
-
-                return;
-
-            }
-
-
-            verifyOwnerButton.disabled =
-                true;
-
-            verifyOwnerButton.textContent =
-                "Verifying...";
-
-
-            try {
-
-                const idToken =
-                    await currentUser.getIdToken(true);
-
-
-                const response =
-                    await fetch(
-                        "https://eos-owner-auth.swathiturl.workers.dev/",
-                        {
-                            method: "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json",
-
-                                "Authorization":
-                                    `Bearer ${idToken}`
-
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    password
-                                })
-
-                        }
-                    );
-
-
-                const result =
-                    await response.json();
-
-
-                if (
-                    result.success === true &&
-                    result.owner === true &&
-                    result.premium === true
-                ) {
-
-                    ownerMessage.textContent =
-                        "👑 Owner verification successful.";
-
-                    ownerMessage.className =
-                        "message success";
-
-
-                    premiumCard.style.display =
-                        "block";
-
-
-                    ownerPassword.value = "";
-
-                }
-
-                else {
-
-                    ownerMessage.textContent =
-                        result.message ||
-                        "Owner verification failed.";
-
-                    ownerMessage.className =
-                        "message error";
-
-                }
-
-            }
-
-            catch (error) {
-
-                console.error(error);
-
-                ownerMessage.textContent =
-                    "Unable to contact EOS Owner security.";
-
-                ownerMessage.className =
-                    "message error";
-
-            }
-
-            finally {
-
-                verifyOwnerButton.disabled =
-                    false;
-
-                verifyOwnerButton.textContent =
-                    "Verify Owner";
-
-            }
-
-        }
-    );
-
-
-    /* -----------------------------------------
-       PREMIUM
-    ----------------------------------------- */
-
-    document
-        .getElementById("openPremiumStudio")
-        .addEventListener(
-            "click",
-            () => {
-
-                window.location.href =
-                    "../";
 
             }
         );
