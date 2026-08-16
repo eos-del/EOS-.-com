@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-
         html,
         body {
             margin: 0;
@@ -79,28 +77,21 @@
             margin-top: 20px;
         }
 
-        button {
+        button,
+        .logout-link {
             border: none;
             border-radius: 10px;
             padding: 13px 22px;
             font-size: 15px;
             cursor: pointer;
             transition: 0.2s ease;
-            user-select: none;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        button:hover {
+        button:hover,
+        .logout-link:hover {
             transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-            transform: none;
         }
 
         .primary-button {
@@ -125,7 +116,6 @@
         .hidden {
             display: none !important;
         }
-
     </style>
 
 </head>
@@ -159,16 +149,14 @@
         </div>
 
 
-        <!-- REAL LOGOUT BUTTON -->
+        <!-- LOGOUT IS NOW A REAL LINK -->
 
-        <button
-            id="logoutButton"
-            class="secondary-button"
-            type="button"
-            onclick="logoutEOS()"
+        <a
+            href="logout.html"
+            class="logout-link secondary-button"
         >
             Logout
-        </button>
+        </a>
 
     </div>
 
@@ -199,7 +187,6 @@
             Enter the main EOS platform.
         </p>
 
-
         <div class="button-row">
 
             <button
@@ -227,7 +214,6 @@
 </div>
 
 
-
 <script type="module">
 
     import {
@@ -236,8 +222,7 @@
 
     import {
         getAuth,
-        onAuthStateChanged,
-        signOut
+        onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
@@ -260,7 +245,6 @@
 
         appId:
             "1:313477636204:web:4c869dd4e207dc01a03849"
-
     };
 
 
@@ -269,10 +253,6 @@
 
     const auth =
         getAuth(app);
-
-
-    window.eosAuth =
-        auth;
 
 
     const loading =
@@ -285,10 +265,6 @@
         document.getElementById("userEmail");
 
 
-    /*
-       LOGIN CHECK
-    */
-
     onAuthStateChanged(
         auth,
         (user) => {
@@ -300,7 +276,6 @@
                 );
 
                 return;
-
             }
 
 
@@ -315,78 +290,9 @@
             dashboard.classList.remove(
                 "hidden"
             );
-
         }
     );
 
-
-    /*
-       LOGOUT FUNCTION
-
-       This is attached directly to
-       the button's onclick.
-    */
-
-    window.logoutEOS =
-        async function () {
-
-            const button =
-                document.getElementById(
-                    "logoutButton"
-                );
-
-
-            button.disabled =
-                true;
-
-            button.textContent =
-                "Logging out...";
-
-
-            try {
-
-                await signOut(auth);
-
-
-                /*
-                   Replace the current page
-                   instead of keeping it
-                   in browser history.
-                */
-
-                window.location.replace(
-                    "index.html"
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "EOS Logout Error:",
-                    error
-                );
-
-
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    "Logout";
-
-
-                alert(
-                    "Logout failed. Please try again."
-                );
-
-            }
-
-        };
-
-
-    /*
-       EOS STUDIO
-    */
 
     document
         .getElementById("openStudio")
@@ -400,10 +306,6 @@
             }
         );
 
-
-    /*
-       BLACK MAMBA
-    */
 
     document
         .getElementById("openBlackMamba")
