@@ -3,160 +3,331 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>EOS Login</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="style.css">
+    <title>EOS Login</title>
 
-<script type="module" src="firebase.js"></script>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
+
 <div class="background"></div>
+
 
 <div class="login-box">
 
-<h1>EOS</h1>
+    <h1>EOS</h1>
 
-<p>Welcome Back</p>
+    <p>Welcome Back</p>
 
-<input
-id="email"
-type="email"
-placeholder="Email">
 
-<input
-id="password"
-type="password"
-placeholder="Password">
+    <input
+        id="email"
+        type="email"
+        placeholder="Email"
+        autocomplete="email"
+    >
 
-<button id="loginButton">
-Login
-</button>
 
-<a href="signup.html">
-Create Account
-</a>
+    <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+    >
 
-<br><br>
 
-<a href="#" id="forgotPassword">
-Forgot Password?
-</a>
+    <button
+        id="loginButton"
+        type="button"
+    >
+        Login
+    </button>
 
-<p id="message"></p>
+
+    <a
+        href="#"
+        id="forgotPassword"
+    >
+        Forgot Password?
+    </a>
+
+
+    <a href="signup.html">
+        Create Account
+    </a>
+
+
+    <p id="message"></p>
 
 </div>
 
 
-
 <script type="module">
 
-const wait = setInterval(() => {
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-if(!window.auth) return;
-
-clearInterval(wait);
-
-window.onAuthStateChanged(window.auth, (user) => {
-
-if(user){
-
-window.location.href="dashboard.html";
-
-}
-
-});
-
-const loginButton = document.getElementById("loginButton");
-  
-loginButton.addEventListener("click", async () => {
-
-const email = document.getElementById("email").value;
-
-const password = document.getElementById("password").value;
-
-const message = document.getElementById("message");
-
-try{
-
-await window.signInWithEmailAndPassword(
-window.auth,
-email,
-password
-);
-
-message.textContent = "Login Successful!";
-
-window.location.href="dashboard.html";
-
-}
-
-catch(error){
-
-message.textContent=error.message;
-
-}
-
-});
-
-},100);
-const forgotPassword =
-document.getElementById("forgotPassword");
+    import {
+        getAuth,
+        signInWithEmailAndPassword,
+        sendPasswordResetEmail,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-forgotPassword.onclick = async function(e){
+    const firebaseConfig = {
 
-e.preventDefault();
+        apiKey:
+            "AIzaSyBXeNMJe6wMEb2u5KfDwOURenwF8f7Nlvg",
 
+        authDomain:
+            "eos-platform-of-gods.firebaseapp.com",
 
-const email =
-document.getElementById("email").value;
+        projectId:
+            "eos-platform-of-gods",
 
+        storageBucket:
+            "eos-platform-of-gods.firebasestorage.app",
 
-const message =
-document.getElementById("message");
+        messagingSenderId:
+            "313477636204",
 
+        appId:
+            "1:313477636204:web:4c869dd4e207dc01a03849"
 
-if(email === ""){
-
-message.innerHTML =
-"Enter your email first";
-
-return;
-
-}
-
-
-try{
-
-await window.sendPasswordResetEmail(
-window.auth,
-email
-);
+    };
 
 
-message.innerHTML =
-"Password reset email sent!";
+    const app =
+        initializeApp(firebaseConfig);
+
+    const auth =
+        getAuth(app);
 
 
-}
-
-catch(error){
-
-message.innerHTML =
-error.message;
-
-}
+    const message =
+        document.getElementById("message");
 
 
-}
-  
+    /*
+       -----------------------------------------
+       LOGOUT CHECK
+       -----------------------------------------
+    */
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const isLogout =
+        params.get("logout") === "1";
+
+
+    /*
+       If dashboard sent us here with
+       ?logout=1, sign out FIRST.
+    */
+
+    if (isLogout) {
+
+        message.textContent =
+            "Logging out of EOS...";
+
+
+        try {
+
+            await signOut(auth);
+
+            /*
+               Remove ?logout=1 from
+               the address bar.
+            */
+
+            window.history.replaceState(
+                {},
+                document.title,
+                "index.html"
+            );
+
+
+            message.textContent =
+                "Logged out successfully.";
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                "Logout failed.";
+
+        }
+
+    }
+
+
+    /*
+       -----------------------------------------
+       LOGIN
+       -----------------------------------------
+    */
+
+    document
+        .getElementById("loginButton")
+        .addEventListener(
+            "click",
+            async () => {
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim()
+                        .toLowerCase();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                if (!email || !password) {
+
+                    message.textContent =
+                        "Enter your email and password.";
+
+                    return;
+
+                }
+
+
+                message.textContent =
+                    "Logging in...";
+
+
+                try {
+
+                    const credential =
+                        await signInWithEmailAndPassword(
+                            auth,
+                            email,
+                            password
+                        );
+
+
+                    const user =
+                        credential.user;
+
+
+                    if (!user.emailVerified) {
+
+                        message.textContent =
+                            "Please verify your email first.";
+
+                        await signOut(auth);
+
+                        return;
+
+                    }
+
+
+                    message.textContent =
+                        "Login successful!";
+
+
+                    window.location.replace(
+                        "dashboard.html"
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+
+                    message.textContent =
+                        error.message;
+
+                }
+
+            }
+        );
+
+
+    /*
+       -----------------------------------------
+       FORGOT PASSWORD
+       -----------------------------------------
+    */
+
+    document
+        .getElementById("forgotPassword")
+        .addEventListener(
+            "click",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim()
+                        .toLowerCase();
+
+
+                if (!email) {
+
+                    message.textContent =
+                        "Enter your email first.";
+
+                    return;
+
+                }
+
+
+                try {
+
+                    await sendPasswordResetEmail(
+                        auth,
+                        email
+                    );
+
+
+                    message.textContent =
+                        "Password reset email sent!";
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+
+                    message.textContent =
+                        error.message;
+
+                }
+
+            }
+        );
+
 </script>
+
 
 </body>
 
