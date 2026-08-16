@@ -120,22 +120,14 @@
 
 </head>
 
-
 <body>
 
-
-<div
-    id="loading"
-    class="loading"
->
+<div id="loading" class="loading">
     Loading EOS...
 </div>
 
 
-<div
-    id="dashboard"
-    class="dashboard-page hidden"
->
+<div id="dashboard" class="dashboard-page hidden">
 
 
     <div class="dashboard-header">
@@ -149,10 +141,10 @@
         </div>
 
 
-        <!-- LOGOUT IS NOW A REAL LINK -->
+        <!-- LOGOUT -->
 
         <a
-            href="logout.html"
+            href="index.html?logout=1"
             class="logout-link secondary-button"
         >
             Logout
@@ -186,6 +178,7 @@
         <p>
             Enter the main EOS platform.
         </p>
+
 
         <div class="button-row">
 
@@ -245,6 +238,7 @@
 
         appId:
             "1:313477636204:web:4c869dd4e207dc01a03849"
+
     };
 
 
@@ -253,16 +247,6 @@
 
     const auth =
         getAuth(app);
-
-
-    const loading =
-        document.getElementById("loading");
-
-    const dashboard =
-        document.getElementById("dashboard");
-
-    const userEmail =
-        document.getElementById("userEmail");
 
 
     onAuthStateChanged(
@@ -276,20 +260,27 @@
                 );
 
                 return;
+
             }
 
 
-            userEmail.textContent =
+            document
+                .getElementById("userEmail")
+                .textContent =
                 user.email || "EOS User";
 
 
-            loading.classList.add(
-                "hidden"
-            );
+            document
+                .getElementById("loading")
+                .classList
+                .add("hidden");
 
-            dashboard.classList.remove(
-                "hidden"
-            );
+
+            document
+                .getElementById("dashboard")
+                .classList
+                .remove("hidden");
+
         }
     );
 
@@ -320,7 +311,6 @@
         );
 
 </script>
-
 
 </body>
 
